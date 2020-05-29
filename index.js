@@ -14,20 +14,17 @@ let users_data = {};
 io.on('connection', (socket) => {
     // join or create a new room
 
-    var clients = 0;
-
     socket.on('create or join', function (room_name, user_name) {
 
-        var user = io.nsps['/'].adapter.rooms[room_name];
-        if (user)
-            // clients = Object.keys (user).length;
-            clients = user.length
+        var clients = io.sockets.adapter.rooms[room_name];
+        if (clients) clients = clients.length;
 
-        if (clients < 2 ) {
+        else clients = 0;
+
+        if (clients <= 2) {
             socket.join(room_name);
             socket.emit('created', room_name, socket.id);
             users_data[user_name] = socket.id;
-            // users_data[user_name].room = room_name;
             console.log('created');
 
         }
@@ -35,14 +32,6 @@ io.on('connection', (socket) => {
             socket.emit('failed', 'Max Participants exceeded');
             console.log("max participants exceeded");
         }
-
-        console.log(socket.adapter.nsp)
-
-        // console.log(users_data)
-        // for (let [k,v ] in Object.entries(users_data)){
-        //     console.log(k,v)
-        // }
-
     });
 
 
