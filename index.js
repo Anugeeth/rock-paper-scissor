@@ -14,7 +14,7 @@ io.on('connection', (socket) => {
     socket.users = [];
     // join or create a new room
 
-    socket.on('join', function (room_name, user_name) {
+    socket.on('create or join', function (room_name, user_name) {
 
         let clients = io.sockets.adapter.rooms[room_name];
         if (clients) clients = clients.length;
@@ -37,6 +37,8 @@ io.on('connection', (socket) => {
             socket.emit('failed', 'Max Participants exceeded');
             console.log("max participants exceeded");
         }
+        console.log(socket.users)
+
     });
 
 
