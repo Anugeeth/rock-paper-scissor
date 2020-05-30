@@ -51,6 +51,7 @@ io.on('connection', (socket) => {
 
         let result, user1Choice, user2Choice, user;
 
+        // updating current user's option
         user = users.find(element => element.id === socket.id);
         user.option = option;
 
@@ -61,50 +62,51 @@ io.on('connection', (socket) => {
             user2Choice = other_user.option;
             user1Choice = users.find(element => element.id === socket.id);
             user1Choice = user1Choice.option;
-        }
 
-        else
-            socket.to(room_name).emit('status', "waiting for opponent");
+            if (user1Choice === user2Choice) {
+                result = 'tie';
+            }
 
+            else {
+                switch (user2Choice) {
+                    case 'Rock':
+                        if (user1Choice === 'Paper') {
+                            result = "User 2 won";
+                        }
 
-        if (user1Choice === user2Choice) {
-            result = 'tie';
+                        else {
+                            result = "User 1 won";
+                        }
+                        break;
+                    case 'Paper':
+                        if (user1Choice === 'Scissors') {
+                            result = "User 1 won";
+                        }
+
+                        else {
+                            result = "User 2 won";
+
+                        }
+                        break;
+                    case 'Scissors':
+                        if (user1Choice === 'Rock') {
+                            result = "User 1 won";
+                        }
+
+                        else {
+                            result = "User 2 won";
+                        }
+                        break;
+                }
+            }
+
+            io.in(room_name).emit('result', result);
+
         }
 
         else {
-            switch (user2Choice) {
-                case 'Rock':
-                    if (user1Choice === 'Paper') {
-
-                    }
-
-                    else {
-
-                    }
-                    break;
-                case 'Paper':
-                    if (user1Choice === 'Scissors') {
-
-                    }
-
-                    else {
-
-                    }
-                    break;
-                case 'Scissors':
-                    if (user1Choice === 'Rock') {
-
-                    }
-
-                    else {
-
-                    }
-                    break;
-                default:
-
-            }
+            socket.to(room_name).emit('status', "waiting for opponent");
         }
-        io.in(room_name).emit('result', result);
 
     });
 
