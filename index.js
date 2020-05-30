@@ -38,10 +38,53 @@ io.on('connection', (socket) => {
     //when a move is triggered by user
 
     socket.on('move', function (room_name, option) {
-        const user = users_data.find(element => element == socket.id);
+        let result;
+        const user = usernames.find(element => element == socket.id);
 
-        socket.broadcast.to(room_name).emit()
-        
+        // socket.broadcast.to(room_name).emit()
+
+
+        if (user1Choice === user2Choice) {
+            // tie
+             result = 'tie';
+
+        }
+
+        else {
+            switch (user2Choice) {
+                case 'Rock':
+                    if (user1Choice === 'Paper') {
+
+                    }
+
+                    else {
+
+                    }
+                    break;
+                case 'Paper':
+                    if (user1Choice === 'Scissors') {
+
+                    }
+
+                    else {
+
+                    }
+                    break;
+                case 'Scissors':
+                    if (user1Choice === 'Rock') {
+
+                    }
+
+                    else {
+
+                    }
+                    break;
+                default:
+
+            }
+        }
+        io.in(room_name).emit('result',result);
+
     });
 
     // on user disconnection
@@ -55,3 +98,5 @@ io.on('connection', (socket) => {
 
 // to be split into modules .... 
 // functional prototyping
+
+
