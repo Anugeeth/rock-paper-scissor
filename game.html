@@ -1,0 +1,53 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game</title>
+</head>
+
+<body>
+
+
+
+
+    <h4></h4>
+    <p>
+        <label><input type="radio" name="opt" value="rock">Rock</label>
+        <label><input type="radio" name="opt" value="paper">Paper</label>
+        <label><input type="radio" name="opt" value="scissor">Scissor</label>
+
+    </p>
+    <input type="button" value="Submit">
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        $(function () {
+
+            var socket = io();
+
+            $(document).ready(function () {
+                $("input[type='button']").click(function () {
+                    var radioValue = $("input[name='opt']:checked").val();
+                    if (radioValue) {
+                        socket.emit('move', radioValue);
+                    }
+                    
+
+                });
+            });
+
+            socket.on('status', function (msg) {
+                        alert(msg)
+                    });
+                    socket.on('result', function (msg) {
+                        alert(msg)
+                    });
+        });
+
+
+    </script>
+</body>
+
+</html>

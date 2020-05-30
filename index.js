@@ -9,6 +9,11 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/game', (req, res) => {
+    res.sendFile(__dirname + '/game.html');
+});
+
+
 const users = [];
 
 io.on('connection', (socket) => {
@@ -48,9 +53,12 @@ io.on('connection', (socket) => {
     socket.on('move', function (room_name, option) {
 
         let result, user1Choice, user2Choice, user;
-
         // updating current user's option
+
+        console.log(users)
         user = users.find(element => element.id === socket.id);
+        console.log(user)
+
         user.option = option;
 
         // checks if other user had made selection
