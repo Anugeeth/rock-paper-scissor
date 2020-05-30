@@ -1,0 +1,3 @@
+[submodule "rockpaperscissor"]
+	path = rockpaperscissor
+	url = git@github.com:Anugeeth/rock-paper-scissor-frontend.git
