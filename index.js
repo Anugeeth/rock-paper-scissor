@@ -9,9 +9,10 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
 
+const users = [];
+
 io.on('connection', (socket) => {
 
-    socket.users = [];
     // join or create a new room
 
     socket.on('create or join', function (room_name, user_name) {
@@ -23,7 +24,7 @@ io.on('connection', (socket) => {
         if (clients <= 2) {
             socket.join(room_name);
 
-            socket.users.push({
+            users.push({
                 user: user_name,
                 room: room_name,
                 id: socket.id,
@@ -37,7 +38,7 @@ io.on('connection', (socket) => {
             socket.emit('failed', 'Max Participants exceeded');
             console.log("max participants exceeded");
         }
-        console.log(socket.users)
+        console.log(users)
 
     });
 
@@ -49,15 +50,15 @@ io.on('connection', (socket) => {
         let result, user1Choice, user2Choice, user;
 
         // updating current user's option
-        user = socket.users.find(element => element.id === socket.id);
+        user = users.find(element => element.id === socket.id);
         user.option = option;
 
         // checks if other user had made selection
 
-        let other_user = socket.users.find(element => (element.room === room && element.id != socket.id));
+        let other_user = users.find(element => (element.room === room && element.id != socket.id));
         if (other_user) {
             user2Choice = other_user.option;
-            user1Choice = socket.users.find(element => element.id === socket.id);
+            user1Choice = users.find(element => element.id === socket.id);
             user1Choice = user1Choice.option;
 
             if (user1Choice === user2Choice) {
