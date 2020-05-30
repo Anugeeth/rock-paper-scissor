@@ -30,9 +30,9 @@ io.on('connection', (socket) => {
             socket.join(room_name);
 
             users.push({
+                id: socket.id,
                 user: user_name,
                 room: room_name,
-                id: socket.id,
                 option: null
             })
 
@@ -50,15 +50,13 @@ io.on('connection', (socket) => {
 
     //when a move is triggered by user
 
-    socket.on('move', function (room_name, option) {
+    socket.on('move', function (option) {
 
-        let result, user1Choice, user2Choice, user;
+        let result, user1Choice, user2Choice, user, room;
         // updating current user's option
 
-        console.log(users)
-        user = users.find(element => element.id === socket.id);
-        console.log(user)
-
+        user = users.find(e => e.id === socket.id);
+        room = user.room;
         user.option = option;
 
         // checks if other user had made selection

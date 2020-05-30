@@ -33,17 +33,17 @@
                     if (radioValue) {
                         socket.emit('move', radioValue);
                     }
-                    
+
 
                 });
             });
 
             socket.on('status', function (msg) {
-                        alert(msg)
-                    });
-                    socket.on('result', function (msg) {
-                        alert(msg)
-                    });
+                alert(msg)
+            });
+            socket.on('result', function (msg) {
+                alert(msg)
+            });
         });
 
 
