@@ -43,8 +43,8 @@ io.on('connection', (socket) => {
             socket.emit('failed', 'Max Participants exceeded');
             console.log("max participants exceeded");
         }
-        console.log(users)
 
+        console.log(users)
     });
 
 
@@ -52,19 +52,29 @@ io.on('connection', (socket) => {
 
     socket.on('move', function (option) {
 
-        let result, user1Choice, user2Choice, user, room;
+        let result, user1Choice, user2Choice, room, user;
         // updating current user's option
 
-        user = users.find(e => e.id === socket.id);
+        user = users.find(e => e.id == socket.id);
+
+        // for (var i=0; i < users.length; i++) {
+        //     if (users[i].id === socket.id) {
+        //         user =  users[i];
+        //     }
+        // }
+
+        console.log(user)
+
+
         room = user.room;
         user.option = option;
 
         // checks if other user had made selection
 
-        let other_user = users.find(element => (element.room === room && element.id != socket.id));
+        let other_user = users.find(element => (element.room == room && element.id != socket.id));
         if (other_user) {
             user2Choice = other_user.option;
-            user1Choice = users.find(element => element.id === socket.id);
+            user1Choice = users.find(element => element.id == socket.id);
             user1Choice = user1Choice.option;
 
             if (user1Choice === user2Choice) {
@@ -101,16 +111,18 @@ io.on('connection', (socket) => {
                         break;
                 }
             }
-            io.in(room_name).emit('result', result);
+            io.in(room).emit('result', result);
         }
         else {
-            socket.to(room_name).emit('status', "waiting for opponent");
+            socket.to(room).emit('status', "waiting for opponent");
         }
     });
 
     // on user disconnection
 
     socket.on('disconnection', function () {
+        let left_user = users.find(e => e.name == socket.username);
+        delete left_user;
         socket.broadcast.emit('userdisconnect', socket.username + 'left the game');
     })
 })
